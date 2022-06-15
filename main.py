@@ -108,7 +108,7 @@ def c_cpp_properties(path: str):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print("install — install config\nremove — remove .vscode folder\nclear — clear configs")
+        print("install — install config\nlist — list of installed configs\nremove — remove .vscode folder\nclear — clear configs")
     elif sys.argv[1] == "list" or sys.argv[1] == "l":
         if not os.path.exists(f"{call_path}/.vscode") or not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
             print("You haven't installed any configs")
@@ -152,7 +152,7 @@ if __name__ == "__main__":
                 for i in range(2, len(sys.argv)):
                     with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
                         configs: dict = json.loads(vsccm.read())   
-                    files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{sys.argv[i]}/{file}"), os.listdir(f"./configs/{sys.argv[i]}")))
+                    files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{sys.argv[i]}/{file}"), os.listdir(f"{app_path}/configs/{sys.argv[i]}")))
                     for f in files:
                         if f == "launch.json":
                             launch(f"{app_path}/configs/{sys.argv[i]}/launch.json")
