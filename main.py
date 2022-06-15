@@ -10,7 +10,7 @@ elif __file__:
 app_path = app_path.replace("\\", "/")
 call_path = os.getcwd().replace("\\", "/")
 
-def launch(path: str):
+def launch(path: str) -> None:
     with open(path, 'r', encoding="utf-8") as file:
         file_dict: dict = json.loads(file.read())
     if not os.path.exists(f"{call_path}/.vscode/launch.json"):
@@ -31,10 +31,15 @@ def launch(path: str):
     except:
         print("Something wrong with a file")
         return
+    vsc_config_list = []
+    for x in vsc_file_dict["configurations"]:
+        if x not in vsc_config_list:
+            vsc_config_list.append(x)
+    vsc_file_dict["configurations"] = vsc_config_list
     with open(f"{call_path}/.vscode/launch.json", 'w', encoding="utf-8") as vsc_file:
         vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
-def tasks(path: str):
+def tasks(path: str) -> None:
     with open(path, 'r', encoding="utf-8") as file:
         file_dict: dict = json.loads(file.read())
     if not os.path.exists(f"{call_path}/.vscode/tasks.json"):
@@ -55,10 +60,15 @@ def tasks(path: str):
     except:
         print("Something wrong with a file")
         return
+    vsc_config_list = []
+    for x in vsc_file_dict["tasks"]:
+        if x not in vsc_config_list:
+            vsc_config_list.append(x)
+    vsc_file_dict["tasks"] = vsc_config_list
     with open(f"{call_path}/.vscode/tasks.json", 'w', encoding="utf-8") as vsc_file:
         vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
-def settings(path: str):
+def settings(path: str) -> None:
     with open(path, 'r', encoding="utf-8") as file:
         file_dict: dict = json.loads(file.read())
     if not os.path.exists(f"{call_path}/.vscode/settings.json"):
@@ -103,6 +113,11 @@ def c_cpp_properties(path: str):
     except:
         print("Something wrong with a file")
         return
+    vsc_config_list = []
+    for x in vsc_file_dict["configurations"]:
+        if x not in vsc_config_list:
+            vsc_config_list.append(x)
+    vsc_file_dict["configurations"] = vsc_config_list
     with open(f"{call_path}/.vscode/c_cpp_properties.json", 'w', encoding="utf-8") as vsc_file:
         vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
@@ -153,28 +168,60 @@ if __name__ == "__main__":
                 if k:
                     with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
                         vsccm.write('{"configs": []}')
+                with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
+                    configs: dict = json.loads(vsccm.read()) 
                 for i in range(2, len(sys.argv)):
-                    with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
-                        configs: dict = json.loads(vsccm.read())   
-                    files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{sys.argv[i]}/{file}"), os.listdir(f"{app_path}/configs/{sys.argv[i]}")))
-                    for f in files:
-                        if f == "launch.json":
-                            launch(f"{app_path}/configs/{sys.argv[i]}/launch.json")
-                            print(f"'{sys.argv[i]}' launch.json successfully installed")
-                        elif f == "tasks.json":
-                            tasks(f"{app_path}/configs/{sys.argv[i]}/tasks.json")
-                            print(f"'{sys.argv[i]}' tasks.json successfully installed")
-                        elif f == "settings.json":
-                            settings(f"{app_path}/configs/{sys.argv[i]}/settings.json")
-                            print(f"'{sys.argv[i]}' settings.json successfully installed")
-                        elif f == "c_cpp_properties.json":
-                            c_cpp_properties(f"{app_path}/configs/{sys.argv[i]}/c_cpp_properties.json")
-                            print(f"'{sys.argv[i]}' c_cpp_properties.json successfully installed")
-                    configs["configs"].append(sys.argv[i])
-                    with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
-                        vsccm.write(json.dumps(configs, ensure_ascii=False, indent=4))
-                    print(f"'{sys.argv[i]}' SUCCESSFULLY INSTALLED")
+                    if sys.argv[i].lower() not in configs["configs"]:  
+                        files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{sys.argv[i]}/{file}"), os.listdir(f"{app_path}/configs/{sys.argv[i]}")))
+                        for f in files:
+                            if f == "launch.json":
+                                launch(f"{app_path}/configs/{sys.argv[i]}/launch.json")
+                                print(f"'{sys.argv[i]}' launch.json successfully installed")
+                            elif f == "tasks.json":
+                                tasks(f"{app_path}/configs/{sys.argv[i]}/tasks.json")
+                                print(f"'{sys.argv[i]}' tasks.json successfully installed")
+                            elif f == "settings.json":
+                                settings(f"{app_path}/configs/{sys.argv[i]}/settings.json")
+                                print(f"'{sys.argv[i]}' settings.json successfully installed")
+                            elif f == "c_cpp_properties.json":
+                                c_cpp_properties(f"{app_path}/configs/{sys.argv[i]}/c_cpp_properties.json")
+                                print(f"'{sys.argv[i]}' c_cpp_properties.json successfully installed")
+                        configs["configs"].append(sys.argv[i])
+                        with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
+                            vsccm.write(json.dumps(configs, ensure_ascii=False, indent=4))
+                        print(f"'{sys.argv[i]}' SUCCESSFULLY INSTALLED")
+                    else:
+                        print(f"'{sys.argv[i]}' has already been installed")
         else:
-            print("Write config name(Use 'install list' to see what you can install)")
+            if os.path.exists(f"{call_path}/.vscode") and os.path.exists(f"{call_path}/.vscode/vsccm.json"):
+                configs_list = []
+                with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
+                    configs_list = json.loads(vsccm.read())["configs"]
+                if len(configs_list) > 0:
+                    for config in configs_list:
+                        try:
+                            with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
+                                figs: dict = json.loads(vsccm.read())   
+                            files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{config}/{file}"), os.listdir(f"{app_path}/configs/{config}")))
+                            for f in files:
+                                if f == "launch.json":
+                                    launch(f"{app_path}/configs/{config}/launch.json")
+                                    print(f"'{config}' launch.json successfully installed")
+                                elif f == "tasks.json":
+                                    tasks(f"{app_path}/configs/{config}/tasks.json")
+                                    print(f"'{config}' tasks.json successfully installed")
+                                elif f == "settings.json":
+                                    settings(f"{app_path}/configs/{config}/settings.json")
+                                    print(f"'{config}' settings.json successfully installed")
+                                elif f == "c_cpp_properties.json":
+                                    c_cpp_properties(f"{app_path}/configs/{config}/c_cpp_properties.json")
+                                    print(f"'{config}' c_cpp_properties.json successfully installed")
+                            print(f"'{config}' SUCCESSFULLY INSTALLED")
+                        except:
+                            print(f"'{config}' NOT FOUND")   
+                else:
+                    print("There is no configs in you vsccm config file")
+            else:
+                print("There is no folder or vsccm config file")
     else:
         print("Uncorrect arguments")
