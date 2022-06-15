@@ -108,7 +108,7 @@ def c_cpp_properties(path: str):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print("-------------")
+        print("install — install config\nremove — remove .vscode folder\nclear — clear configs")
     elif sys.argv[1] == "list" or sys.argv[1] == "l":
         if not os.path.exists(f"{call_path}/.vscode") or not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
             print("You haven't installed any configs")
