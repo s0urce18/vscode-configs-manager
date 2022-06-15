@@ -32,7 +32,7 @@ def launch(path: str):
         print("Something wrong with a file")
         return
     with open(f"{call_path}/.vscode/launch.json", 'w', encoding="utf-8") as vsc_file:
-        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False))
+        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
 def tasks(path: str):
     with open(path, 'r', encoding="utf-8") as file:
@@ -56,7 +56,7 @@ def tasks(path: str):
         print("Something wrong with a file")
         return
     with open(f"{call_path}/.vscode/tasks.json", 'w', encoding="utf-8") as vsc_file:
-        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False))
+        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
 def settings(path: str):
     with open(path, 'r', encoding="utf-8") as file:
@@ -80,7 +80,7 @@ def settings(path: str):
         print("Something wrong with a file")
         return
     with open(f"{call_path}/.vscode/settings.json", 'w', encoding="utf-8") as vsc_file:
-        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False))
+        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
 def c_cpp_properties(path: str):
     with open(path, 'r', encoding="utf-8") as file:
@@ -104,7 +104,7 @@ def c_cpp_properties(path: str):
         print("Something wrong with a file")
         return
     with open(f"{call_path}/.vscode/c_cpp_properties.json", 'w', encoding="utf-8") as vsc_file:
-        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False))
+        vsc_file.write(json.dumps(vsc_file_dict, ensure_ascii=False, indent=4))
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
@@ -146,8 +146,12 @@ if __name__ == "__main__":
                 if not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
                     with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
                         vsccm.write('{"configs": []}')
-                with open(f"{call_path}/.vscode/vsccm.json", 'w+') as vsccm:
+                k = False
+                with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
                     if vsccm.read() == '':
+                        k = True
+                if k:
+                    with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
                         vsccm.write('{"configs": []}')
                 for i in range(2, len(sys.argv)):
                     with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
@@ -156,15 +160,20 @@ if __name__ == "__main__":
                     for f in files:
                         if f == "launch.json":
                             launch(f"{app_path}/configs/{sys.argv[i]}/launch.json")
+                            print(f"'{sys.argv[i]}' launch.json successfully installed")
                         elif f == "tasks.json":
                             tasks(f"{app_path}/configs/{sys.argv[i]}/tasks.json")
+                            print(f"'{sys.argv[i]}' tasks.json successfully installed")
                         elif f == "settings.json":
                             settings(f"{app_path}/configs/{sys.argv[i]}/settings.json")
+                            print(f"'{sys.argv[i]}' settings.json successfully installed")
                         elif f == "c_cpp_properties.json":
                             c_cpp_properties(f"{app_path}/configs/{sys.argv[i]}/c_cpp_properties.json")
+                            print(f"'{sys.argv[i]}' c_cpp_properties.json successfully installed")
                     configs["configs"].append(sys.argv[i])
                     with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
-                        vsccm.write(json.dumps(configs, ensure_ascii=False))
+                        vsccm.write(json.dumps(configs, ensure_ascii=False, indent=4))
+                    print(f"'{sys.argv[i]}' SUCCESSFULLY INSTALLED")
         else:
             print("Write config name(Use 'install list' to see what you can install)")
     else:
