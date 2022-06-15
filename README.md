@@ -1,6 +1,6 @@
 # vscode-configs-manager
 
-<img src="icon.png" width="100">
+<img src="imgs/preview.png" width="300px">
 
 **VSCCM**(VSCode config manager) — program for maganering VSCode configs
 
