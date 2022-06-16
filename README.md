@@ -16,7 +16,11 @@ Create folder in `config` folder with name of your config and paste there files 
 
 ## Using
 
-`install` — install config
+`install` — install configs from `vsccm.json` file
+
+`install --configfile={local path to vsccm.json file}` — install configs from `vsccm.json` file with giving path to it
+
+`install {config name}` — install config
 
 `install list` — show list of configs which you can install
 
