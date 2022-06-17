@@ -6,7 +6,7 @@
 
 ## Installation
 
-Extract `base-build.zip` to any folder and add to PATH or extract to work folder. In `base-build.zip` included base configs for **Python**, **NodeJS**, **TypeScript**, **C++** and **.NET**
+Extract `base-build.zip` to any folder and add to PATH or extract to work folder. In `base-build.zip` included base configs for **Python**, **NodeJS**, **TypeScript**, **Go**, **C++** and **.NET**
 
 If you don't need base configs download `vsccm.exe` and create your configs
 
