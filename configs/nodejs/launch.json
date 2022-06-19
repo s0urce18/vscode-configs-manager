@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "NodeJS: Active file (integrated)",
+            "type": "node",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "NodeJS: Active file (external)",
+            "type": "node",
+            "request": "launch",
+            "program": "${file}",
+            "console": "externalTerminal"
+        }
+    ]
+}

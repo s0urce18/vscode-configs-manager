@@ -1,0 +1,10 @@
+{
+    "tasks": [
+        {
+            "label": "rustbuild",
+            "command": "rustc",
+            "type": "process",
+            "args": ["${file}"]
+        }
+    ]
+}
