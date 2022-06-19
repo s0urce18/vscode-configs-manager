@@ -3,7 +3,7 @@
         {
             "type": "typescript",
             "tsconfig": "tsconfig.json",
-            "label": "tsc",
+            "label": "tsbuild",
             "problemMatcher": [
                 "$tsc"
             ],

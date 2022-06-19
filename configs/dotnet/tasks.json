@@ -1,7 +1,7 @@
 {
     "tasks": [
         {
-            "label": "build",
+            "label": "dotnetbuild",
             "command": "dotnet",
             "type": "process",
             "args": [
