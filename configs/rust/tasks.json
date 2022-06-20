@@ -4,7 +4,11 @@
             "label": "rustbuild",
             "command": "rustc",
             "type": "process",
-            "args": ["${file}"]
+            "args": [
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.exe"
+            ]
         }
     ]
 }
