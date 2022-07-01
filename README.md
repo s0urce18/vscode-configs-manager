@@ -20,11 +20,17 @@ Create folder in `config` folder with name of your config and paste there files 
 
 `install --configfile={local path to vsccm.json file}` — install configs from `vsccm.json` file with giving path to it
 
+`install --workfolder={path to workfolder}` — install configs from `vsccm.json` file with giving path to workfolder
+
 `install {config name}` — install config
+
+`install --workfolder={path to workfolder} {config name}` — install config in given workfolder
 
 `install list` — show list of configs which you can install
 
 `list` — list of installed configs
+
+`list --workfolder={path to workfolder}` — list of installed configs in workfolder
 
 `remove` — remove .vscode folder
 
