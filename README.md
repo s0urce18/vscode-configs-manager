@@ -34,4 +34,8 @@ Create folder in `config` folder with name of your config and paste there files 
 
 `remove` — remove .vscode folder
 
+`remove --workfolder={path to workfolder}` — remove .vscode folder in workfolder
+
 `clear` — clear configs
+
+`clear --workfolder={path to workfolder}` — clear configs in workfolder
