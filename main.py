@@ -125,16 +125,26 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("install — install config\nlist — list of installed configs\nremove — remove .vscode folder\nclear — clear configs")
     elif sys.argv[1] == "list" or sys.argv[1] == "l":
-        if len(sys.argv) > 2 and sys.argv[2][:13] == "--workfolder=" or sys.argv[2][:12] == "-workfolder=":
-            workfolder_path: str = sys.argv[2][13:]
-            if not os.path.exists(f"{workfolder_path}/.vscode") or not os.path.exists(f"{workfolder_path}/.vscode/vsccm.json"):
-                print("You haven't installed any configs")
+        if len(sys.argv) > 2:
+            if sys.argv[2][:13] == "--workfolder=" or sys.argv[2][:12] == "-workfolder=":
+                workfolder_path: str = sys.argv[2][13:]
+                if not os.path.exists(f"{workfolder_path}/.vscode") or not os.path.exists(f"{workfolder_path}/.vscode/vsccm.json"):
+                    print("You haven't installed any configs")
+                else:
+                    with open(f"{workfolder_path}/.vscode/vsccm.json") as vsccm:
+                        vsccm_dict: dict = json.loads(vsccm.read())
+                    print("Installed configs:")
+                    for cfg in vsccm_dict["configs"]:
+                        print(f"|-{cfg}")
             else:
-                with open(f"{workfolder_path}/.vscode/vsccm.json") as vsccm:
-                    vsccm_dict: dict = json.loads(vsccm.read())
-                print("Installed configs:")
-                for cfg in vsccm_dict["configs"]:
-                    print(f"|-{cfg}")
+                if not os.path.exists(f"{call_path}/.vscode") or not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
+                    print("You haven't installed any configs")
+                else:
+                    with open(f"{call_path}/.vscode/vsccm.json") as vsccm:
+                        vsccm_dict: dict = json.loads(vsccm.read())
+                    print("Installed configs:")
+                    for cfg in vsccm_dict["configs"]:
+                        print(f"|-{cfg}")
         else:
             if not os.path.exists(f"{call_path}/.vscode") or not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
                 print("You haven't installed any configs")
