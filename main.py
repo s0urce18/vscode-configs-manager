@@ -125,26 +125,53 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("install — install config\nlist — list of installed configs\nremove — remove .vscode folder\nclear — clear configs")
     elif sys.argv[1] == "list" or sys.argv[1] == "l":
-        if not os.path.exists(f"{call_path}/.vscode") or not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
-            print("You haven't installed any configs")
+        if len(sys.argv) > 2 and sys.argv[2][:13] == "--workfolder=" or sys.argv[2][:12] == "-workfolder=":
+            workfolder_path: str = sys.argv[2][13:]
+            if not os.path.exists(f"{workfolder_path}/.vscode") or not os.path.exists(f"{workfolder_path}/.vscode/vsccm.json"):
+                print("You haven't installed any configs")
+            else:
+                with open(f"{workfolder_path}/.vscode/vsccm.json") as vsccm:
+                    vsccm_dict: dict = json.loads(vsccm.read())
+                print("Installed configs:")
+                for cfg in vsccm_dict["configs"]:
+                    print(f"|-{cfg}")
         else:
-            with open(f"{call_path}/.vscode/vsccm.json") as vsccm:
-                vsccm_dict: dict = json.loads(vsccm.read())
-            print("Installed configs:")
-            for cfg in vsccm_dict["configs"]:
-                print(f"|-{cfg}")
+            if not os.path.exists(f"{call_path}/.vscode") or not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
+                print("You haven't installed any configs")
+            else:
+                with open(f"{call_path}/.vscode/vsccm.json") as vsccm:
+                    vsccm_dict: dict = json.loads(vsccm.read())
+                print("Installed configs:")
+                for cfg in vsccm_dict["configs"]:
+                    print(f"|-{cfg}")
     elif sys.argv[1] == "remove" or sys.argv[1] == "r":
-        if os.path.exists(f"{call_path}/.vscode"):
-            shutil.rmtree(f"{call_path}/.vscode")
-        print("Directory configs removed")
+        if len(sys.argv) > 2 and sys.argv[2][:13] == "--workfolder=" or sys.argv[2][:12] == "-workfolder=":
+            workfolder_path: str = sys.argv[2][13:]
+            if os.path.exists(f"{workfolder_path}/.vscode"):
+                shutil.rmtree(f"{workfolder_path}/.vscode")
+            print("Directory configs removed")
+        else:
+            if os.path.exists(f"{call_path}/.vscode"):
+                shutil.rmtree(f"{call_path}/.vscode")
+            print("Directory configs removed")
     elif sys.argv[1] == "clear" or sys.argv[1] == "c":
-        if os.path.exists(f"{call_path}/.vscode"):
-            shutil.rmtree(f"{call_path}/.vscode")
-            os.mkdir(f"{call_path}/.vscode")
-        if os.path.exists(f"{call_path}/.vscode/vsccm.json"):
-            vsccm = open(f"{call_path}/.vscode/vsccm.json", 'w')
-            vsccm.close()
-        print("Directory configs cleared")
+        if len(sys.argv) > 2 and sys.argv[2][:13] == "--workfolder=" or sys.argv[2][:12] == "-workfolder=":
+            workfolder_path: str = sys.argv[2][13:]
+            if os.path.exists(f"{workfolder_path}/.vscode"):
+                shutil.rmtree(f"{workfolder_path}/.vscode")
+                os.mkdir(f"{workfolder_path}/.vscode")
+            if os.path.exists(f"{workfolder_path}/.vscode/vsccm.json"):
+                vsccm = open(f"{workfolder_path}/.vscode/vsccm.json", 'w')
+                vsccm.close()
+            print("Directory configs cleared")
+        else:
+            if os.path.exists(f"{call_path}/.vscode"):
+                shutil.rmtree(f"{call_path}/.vscode")
+                os.mkdir(f"{call_path}/.vscode")
+            if os.path.exists(f"{call_path}/.vscode/vsccm.json"):
+                vsccm = open(f"{call_path}/.vscode/vsccm.json", 'w')
+                vsccm.close()
+            print("Directory configs cleared")
     elif sys.argv[1] == "install" or sys.argv[1] == "i":
         if len(sys.argv) == 3:
             if sys.argv[2] == "list" or sys.argv[2] == "l":
@@ -155,6 +182,80 @@ if __name__ == "__main__":
                         for file in os.listdir(f"{app_path}/configs/{config}"):
                             if os.path.isfile(f"{app_path}/configs/{config}/{file}"):
                                 print(f"  |-{file}")
+            elif sys.argv[2][:13] == "--configfile=" or sys.argv[2][:12] == "-configfile=":
+                if not os.path.exists(f"{call_path}/.vscode"):
+                    os.mkdir(f"{call_path}/.vscode")
+                if not os.path.exists(f"{call_path}/.vscode/vsccm.json"):
+                    with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
+                        vsccm.write('{"configs": []}')
+                k: bool = False
+                with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
+                    if vsccm.read() == '':
+                        k = True
+                if k:
+                    with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
+                        vsccm.write('{"configs": []}')
+                with open(f"{call_path}/.vscode/vsccm.json", 'r') as vsccm:
+                    configs: dict = json.loads(vsccm.read()) 
+                try:
+                    configs_list: list = []
+                    with open(f"{call_path}/{sys.argv[2][13:] + ('.json' if sys.argv[2][-5:] != '.json' else '')}", 'r') as vsccm:
+                        configs_list = json.loads(vsccm.read())["configs"]
+                    if len(configs_list) > 0:
+                        for config in configs_list:
+                            try:
+                                files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{config}/{file}"), os.listdir(f"{app_path}/configs/{config}")))
+                                for f in files:
+                                    if f == "launch.json":
+                                        launch(f"{app_path}/configs/{config}/launch.json")
+                                        print(f"'{config}' launch.json successfully installed")
+                                    elif f == "tasks.json":
+                                        tasks(f"{app_path}/configs/{config}/tasks.json")
+                                        print(f"'{config}' tasks.json successfully installed")
+                                    elif f == "settings.json":
+                                        settings(f"{app_path}/configs/{config}/settings.json")
+                                        print(f"'{config}' settings.json successfully installed")
+                                    elif f == "c_cpp_properties.json":
+                                        c_cpp_properties(f"{app_path}/configs/{config}/c_cpp_properties.json")
+                                        print(f"'{config}' c_cpp_properties.json successfully installed")
+                                configs["configs"].append(config)
+                                with open(f"{call_path}/.vscode/vsccm.json", 'w') as vsccm:
+                                    vsccm.write(json.dumps(configs, ensure_ascii=False, indent=4))
+                                print(f"'{config}' SUCCESSFULLY INSTALLED")
+                            except Exception:
+                                print(f"'{config}' NOT FOUND")
+                except Exception:
+                    print("Uncorrect arguments")
+            elif sys.argv[2][:13] == "--workfolder=" or sys.argv[2][:12] == "-workfolder=":
+                workfolder_path: str = sys.argv[2][13:]
+                if os.path.exists(f"{workfolder_path}/.vscode") and os.path.exists(f"{workfolder_path}/.vscode/vsccm.json"):
+                    configs_list: list = []
+                    with open(f"{workfolder_path}/.vscode/vsccm.json", 'r') as vsccm:
+                        configs_list = json.loads(vsccm.read())["configs"]
+                    if len(configs_list) > 0:
+                        for config in configs_list:
+                            try: 
+                                files: list = list(filter(lambda file: os.path.isfile(f"{app_path}/configs/{config}/{file}"), os.listdir(f"{app_path}/configs/{config}")))
+                                for f in files:
+                                    if f == "launch.json":
+                                        launch(f"{app_path}/configs/{config}/launch.json", workfolder_path)
+                                        print(f"'{config}' launch.json successfully installed")
+                                    elif f == "tasks.json":
+                                        tasks(f"{app_path}/configs/{config}/tasks.json", workfolder_path)
+                                        print(f"'{config}' tasks.json successfully installed")
+                                    elif f == "settings.json":
+                                        settings(f"{app_path}/configs/{config}/settings.json", workfolder_path)
+                                        print(f"'{config}' settings.json successfully installed")
+                                    elif f == "c_cpp_properties.json":
+                                        c_cpp_properties(f"{app_path}/configs/{config}/c_cpp_properties.json", workfolder_path)
+                                        print(f"'{config}' c_cpp_properties.json successfully installed")
+                                print(f"'{config}' SUCCESSFULLY INSTALLED")
+                            except Exception:
+                                print(f"'{config}' NOT FOUND")   
+                    else:
+                        print("There is no configs in you vsccm config file")
+                else:
+                    print("There is no folder or vsccm config file")
             else:
                 if not os.path.exists(f"{call_path}/.vscode"):
                     os.mkdir(f"{call_path}/.vscode")
