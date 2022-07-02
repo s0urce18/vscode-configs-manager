@@ -4,6 +4,8 @@
 
 **VSCCM**(VSCode config manager) — program for maganering VSCode configs
 
+VSCode extension: https://marketplace.visualstudio.com/items?itemName=s0urcecom.vscode-configs-manager-extension
+
 ## Installation
 
 Extract `base-build.zip` to any folder and add to PATH or extract to work folder. In `base-build.zip` included base configs for **Python**, **NodeJS**, **TypeScript**, **Go**, **G++**, **.NET** and **Rust**
