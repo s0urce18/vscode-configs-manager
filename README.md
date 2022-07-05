@@ -10,7 +10,7 @@ VSCode extension: https://marketplace.visualstudio.com/items?itemName=s0urcecom.
 
 Extract `base-build-windows.zip` or `base-build-linux.zip` (as your OS need) to any folder and add to PATH or extract to work folder. In `base-build.zip` included base configs for **Python**, **NodeJS**, **TypeScript**, **Go**, **G++**, **.NET** and **Rust**
 
-If you don't need base configs download `vsccm.exe` and create your configs
+If you don't need base configs download `vsccm.exe` or `vsccm` (as your OS need) and create your configs
 
 ## Creating configs
 
