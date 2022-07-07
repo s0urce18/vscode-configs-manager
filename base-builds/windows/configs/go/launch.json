@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "configurations": [
+        {
+            "name": "Go: Active file (integrated)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Go: Active file (external)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${file}",
+            "console": "externalTerminal"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "tasks": [
+        {
+            "label": "rustbuild",
+            "command": "rustc",
+            "type": "process",
+            "args": [
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.exe"
+            ]
+        }
+    ]
+}

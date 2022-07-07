@@ -1,0 +1,16 @@
+{
+    "tasks": [
+        {
+            "label": "dotnetbuild",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${relativeFileDirname}/${relativeFileDirname}.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
