@@ -8,9 +8,13 @@ VSCode extension: https://marketplace.visualstudio.com/items?itemName=s0urcecom.
 
 ## Installation
 
-Extract `base-build-windows.zip` or `base-build-linux.zip` (as your OS need) to any folder and add to PATH or extract to work folder. In `base-build.zip` included base configs for **Python**, **NodeJS**, **TypeScript**, **Go**, **G++**, **.NET** and **Rust**
+All builds are in folder `builds`. There you can choose your OS and get application file, configs or base build zip archive
 
-If you don't need base configs download `vsccm.exe` or `vsccm` (as your OS need) and create your configs
+In base build archive are included configs(from folder `configs`) and application file
+
+If you need base build, you need to extract archive where you need and add this folder to PATH variable
+
+If you don't need base build, you can use application file singly
 
 ## Creating configs
 
