@@ -56,7 +56,7 @@ def tasks(path: str, workfolder: str = call_path) -> None: # installing tasks.js
             vsccm.write('{"version": "2.0.0", "tasks": []}')
     with open(f"{workfolder}/.vscode/tasks.json", 'r', encoding="utf-8") as vsc_file:
         vsc_file_dict: dict = json.loads(vsc_file.read())
-    if isempty(f"{workfolder}/.vscode/lautasksnch.json"):
+    if isempty(f"{workfolder}/.vscode/tasks.json"):
         with open(f"{workfolder}/.vscode/tasks.json", 'w') as vsccm:
             vsccm.write('{"version": "2.0.0", "tasks": []}')
     try:
